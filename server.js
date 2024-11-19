@@ -310,6 +310,90 @@ app.get('/api/discountgames', (req, res) => {
     });
 });
 
+// Add this endpoint to get the next available ID
+app.get('/api/nextId/:userType', (req, res) => {
+  const userType = req.params.userType;
+  
+  const query = 'SELECT MAX(UserId) as maxId FROM login WHERE UserType = ?';
+  
+  db.query(query, [userType], (err, results) => {
+    if (err) {
+      console.error('Error getting next ID:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    let nextId;
+    const maxId = results[0].maxId;
+    
+    if (!maxId) {
+      // If no existing users of this type, start with base number
+      switch(userType) {
+        case 'User':
+          nextId = 101;
+          break;
+        case 'Developer':
+          nextId = 201;
+          break;
+        case 'Publisher':
+          nextId = 301;
+          break;
+        default:
+          nextId = 101;
+      }
+    } else {
+      nextId = maxId + 1;
+    }
+
+    res.json({ nextId });
+  });
+});
+
+// Update the register endpoint
+app.post('/api/register', (req, res) => {
+  const { userId, userName, password, userType } = req.body;
+
+  // Start a transaction
+  db.beginTransaction((err) => {
+    if (err) {
+      console.error('Error starting transaction:', err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    // Insert into login table
+    const query = 'INSERT INTO login (UserId, UserName, Password, UserType) VALUES (?, ?, ?, ?)';
+    
+    db.query(query, [userId, userName, password, userType], (err, results) => {
+      if (err) {
+        db.rollback(() => {
+          console.error('Error during registration:', err);
+          res.status(400).json({ 
+            error: err.code === 'ER_DUP_ENTRY' 
+              ? 'User ID or Username already exists' 
+              : 'Registration failed' 
+          });
+        });
+        return;
+      }
+
+      // If successful, commit the transaction
+      db.commit((err) => {
+        if (err) {
+          db.rollback(() => {
+            console.error('Error committing transaction:', err);
+            res.status(500).json({ error: 'Registration failed' });
+          });
+          return;
+        }
+        res.json({ 
+          success: true,
+          message: `Registration successful! Your User ID is: ${userId}`
+        });
+      });
+    });
+  });
+});
+
 // Serve the main 'index.html' file for all routes
 app.use(express.static(path.join(__dirname, 'build')));
 

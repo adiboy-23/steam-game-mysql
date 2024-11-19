@@ -3,7 +3,7 @@ import logo from '../assets/logo.jpeg';
 import { FiMenu } from 'react-icons/fi';
 import { ImDownload } from 'react-icons/im';
 import { BiWorld } from 'react-icons/bi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Navbar = ({ onUserTypeSelected }) => {
   const navigate = useNavigate();
@@ -74,6 +74,12 @@ const Navbar = ({ onUserTypeSelected }) => {
                 </div>
               )}
             </li>
+            <Link 
+              to="/register" 
+              className="text-white hover:text-[#66c0f4] px-4 py-2"
+            >
+              Register
+            </Link>
           </ul>
         </div>
 

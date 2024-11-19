@@ -10,6 +10,7 @@ import Categories from "../components/Categories";
 import Recomended from "../components/Recomended";
 import DiscountCount from "../components/DiscountCount";
 import SpecialOffer from "../components/SpecialOffer";
+import Register from '../components/Register';
 
 const YourParentComponent = () => {
   const [selectedUserType, setSelectedUserType] = useState(null);
@@ -62,6 +63,7 @@ const YourParentComponent = () => {
       <>
         {renderUserContent()}
         <Routes>
+          <Route path="/register" element={<Register />} />
           <Route path="/PublisherPage" element={<PublisherPage />} />
           <Route path="/DeveloperPage" element={<DeveloperPage />} />
           <Route path="/UserPage" element={<UserPage />} />
