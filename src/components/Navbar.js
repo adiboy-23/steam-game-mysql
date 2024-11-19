@@ -5,7 +5,7 @@ import { ImDownload } from 'react-icons/im';
 import { BiWorld } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ onUserTypeSelected }) => {
   const navigate = useNavigate();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [showContactTooltip, setShowContactTooltip] = useState(false);
@@ -32,17 +32,10 @@ const Navbar = () => {
     fetchGeolocation();
   }, []);
 
-  const handleUserTypeSelection = (userType) => {
-    if (userType === 'Publisher') {
-      navigate('/PublisherPage');
-    } else if (userType === 'Developer') {
-      navigate('/DeveloperPage');
-    } else if (userType === 'User') {
-      navigate('/UserPage');
+  const handleUserSelection = (userType) => {
+    if (onUserTypeSelected) {
+      onUserTypeSelected(userType.toLowerCase());
     }
-
-    // Close the options after selection
-    setShowUserOptions(false);
   };
 
   return (
@@ -107,19 +100,19 @@ const Navbar = () => {
               <div className="absolute mt-2 flex flex-col space-y-2">
                 <div
                   className="bg-[#5c7e10] px-4 py-2 rounded-[0.3rem] cursor-pointer"
-                  onClick={() => handleUserTypeSelection('User')}
+                  onClick={() => handleUserSelection('user')}
                 >
                   User
                 </div>
                 <div
                   className="bg-[#5c7e10] px-4 py-2 rounded-[0.3rem] cursor-pointer"
-                  onClick={() => handleUserTypeSelection('Publisher')}
+                  onClick={() => handleUserSelection('publisher')}
                 >
                   Publisher
                 </div>
                 <div
                   className="bg-[#5c7e10] px-4 py-2 rounded-[0.3rem] cursor-pointer"
-                  onClick={() => handleUserTypeSelection('Developer')}
+                  onClick={() => handleUserSelection('developer')}
                 >
                   Developer
                 </div>

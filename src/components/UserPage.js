@@ -241,3 +241,19 @@ const UserPage = () => {
 };
 
 export default UserPage;
+
+
+// import React from 'react';
+
+// const UserPage = () => {
+//   return (
+//     <div className="text-white">
+//       {/* Add any user-specific content here */}
+//       <h2>Welcome to Your Steam Account</h2>
+//       {/* The Categories, Recommended, DiscountCount, and SpecialOffer components 
+//           are now rendered in the parent component */}
+//     </div>
+//   );
+// };
+
+// export default UserPage;
