@@ -22,6 +22,7 @@ const DeveloperPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [showGames, setShowGames] = useState(false);
   const [authenticatedDeveloperId, setAuthenticatedDeveloperId] = useState('');
+  const [totalGames, setTotalGames] = useState(0);
 
   useEffect(() => {
     // Fetch the list of genres when the component mounts
@@ -71,11 +72,11 @@ const DeveloperPage = () => {
   };
 
   const fetchDeveloperGames = () => {
-    // Fetch games associated with the logged-in developer with a single API call
     axios.get(`http://localhost:3001/api/developergames/${developerCredentials.UserId}`)
       .then((response) => {
         console.log('Developer Games Response:', response.data);
-        setDeveloperGames(response.data);
+        setDeveloperGames(response.data.games);
+        setTotalGames(response.data.totalGames);
       })
       .catch((error) => {
         console.error('Error fetching developer games:', error);
@@ -225,7 +226,12 @@ const DeveloperPage = () => {
       {/* Display games associated with the logged-in developer */}
       {showGames && Array.isArray(developerGames) && developerGames.length > 0 && (
         <div className="game-list-container">
-          <h2>Your Games</h2>
+          <div className="games-header">
+            <h2>Your Games</h2>
+            <div className="games-count">
+              This developer has <span className="highlight">{totalGames}</span> game{totalGames !== 1 ? 's' : ''}
+            </div>
+          </div>
           <div className="games-grid">
             {developerGames.map((game) => {
               const imageKey = `${game.GameId}`;

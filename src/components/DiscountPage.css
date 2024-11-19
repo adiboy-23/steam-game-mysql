@@ -1,0 +1,68 @@
+.discount-page-container {
+  padding: 20px;
+}
+
+.discount-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.discount-count {
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #333;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #e91e63;  /* Different color from developer page */
+  font-size: 1.3em;
+}
+
+.discount-games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.discount-game-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.discount-game-card:hover {
+  transform: translateY(-5px);
+}
+
+.game-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.game-info {
+  padding: 15px;
+}
+
+.game-info h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.game-info p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* Add a special style for the discount percentage */
+.game-info p:nth-child(3) {
+  color: #e91e63;
+  font-weight: bold;
+}

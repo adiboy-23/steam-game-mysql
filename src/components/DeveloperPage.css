@@ -112,3 +112,20 @@ form {
   color: #666;
   font-size: 0.9em;
 }
+
+.games-header {
+  padding: 20px;
+  text-align: center;
+}
+
+.games-count {
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #333;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #2196F3;
+  font-size: 1.3em;
+}

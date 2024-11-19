@@ -227,22 +227,87 @@ app.delete('/api/games/:GameId', (req, res) => {
 // Add this new endpoint
 app.get('/api/developergames/:developerId', (req, res) => {
   const developerId = req.params.developerId;
-  const query = `
-    SELECT g.GameId, g.GameName, g.GameImage, g.Size, g.ReleaseDate, g.Rating, gr.GenreName 
-    FROM Game g
-    JOIN developergame dg ON g.GameId = dg.GameId
-    LEFT JOIN Genre gr ON g.GenreId = gr.GenreId
-    WHERE dg.DeveloperId = ?
-  `;
+  const queries = [
+    // Query for games details
+    `SELECT g.GameId, g.GameName, g.GameImage, g.Size, g.ReleaseDate, g.Rating, gr.GenreName 
+     FROM Game g
+     JOIN developergame dg ON g.GameId = dg.GameId
+     LEFT JOIN Genre gr ON g.GenreId = gr.GenreId
+     WHERE dg.DeveloperId = ?`,
+    
+    // Query for count of games
+    `SELECT COUNT(*) as gameCount 
+     FROM developergame 
+     WHERE DeveloperId = ?`
+  ];
   
-  db.query(query, [developerId], (err, results) => {
-    if (err) {
+  Promise.all([
+    new Promise((resolve, reject) => {
+      db.query(queries[0], [developerId], (err, games) => {
+        if (err) reject(err);
+        else resolve(games);
+      });
+    }),
+    new Promise((resolve, reject) => {
+      db.query(queries[1], [developerId], (err, count) => {
+        if (err) reject(err);
+        else resolve(count[0]);
+      });
+    })
+  ])
+    .then(([games, count]) => {
+      res.json({
+        games: games,
+        totalGames: count.gameCount
+      });
+    })
+    .catch(err => {
       console.error('Error fetching developer games:', err);
       res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json(results);
-    }
-  });
+    });
+});
+
+// Add this new endpoint for discount games
+app.get('/api/discountgames', (req, res) => {
+  const queries = [
+    // Query for discounted games details
+    `SELECT g.GameId, g.GameName, g.Size, g.ReleaseDate, g.Rating, gr.GenreName,
+            d.DiscountPercentage, d.StartDate, d.EndDate 
+     FROM Game g
+     JOIN Discount d ON g.GameId = d.GameId
+     LEFT JOIN Genre gr ON g.GenreId = gr.GenreId
+     WHERE d.EndDate >= CURDATE()`,
+    
+    // Query for count of discounted games
+    `SELECT COUNT(*) as discountCount 
+     FROM Discount 
+     WHERE EndDate >= CURDATE()`
+  ];
+  
+  Promise.all([
+    new Promise((resolve, reject) => {
+      db.query(queries[0], (err, games) => {
+        if (err) reject(err);
+        else resolve(games);
+      });
+    }),
+    new Promise((resolve, reject) => {
+      db.query(queries[1], (err, count) => {
+        if (err) reject(err);
+        else resolve(count[0]);
+      });
+    })
+  ])
+    .then(([games, count]) => {
+      res.json({
+        games: games,
+        totalDiscounts: count.discountCount
+      });
+    })
+    .catch(err => {
+      console.error('Error fetching discount games:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 });
 
 // Serve the main 'index.html' file for all routes
