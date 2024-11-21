@@ -1,0 +1,131 @@
+/* DeveloperPage.css */
+
+body {
+    background-image: url('../assets/gaming.jpg');
+    background-size: cover;
+    background-position: fill;
+    background-repeat: no-repeat;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Adjust the alpha channel for transparency */
+}
+
+.header {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black; /* Change text color to black */
+    font-weight: bold; /* Make text bold */
+}
+
+.button {
+    background-color: #5c7e10;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Form styles */
+.form-container {
+    background-color: rgba(255, 255, 255, 0); /* Adjust the alpha channel for transparency */
+    border: 2px solid #0a0a0a; /* Adjust the border width for boldness */
+    border-radius: 13px; /* Add border-radius for rounded corners */
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.form-container h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+form {
+    display: grid;
+    gap: 15px;
+}
+
+.form-input {
+    display: grid;
+    gap: 5px;
+}
+
+.form-input input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.form-button {
+    background-color: #5c7e10;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.game-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+}
+
+.game-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.game-info {
+  padding: 15px;
+}
+
+.game-info h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.game-info p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.games-header {
+  padding: 20px;
+  text-align: center;
+}
+
+.games-count {
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #333;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #2196F3;
+  font-size: 1.3em;
+}
