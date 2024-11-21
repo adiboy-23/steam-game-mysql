@@ -257,31 +257,44 @@ app.delete('/api/games/:GameId', (req, res) => {
   db.query('SELECT * FROM Game WHERE GameId = ?', [gameId], (err, results) => {
     if (err) {
       console.error('Error checking GameId:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else if (results.length === 0) {
-      // If no results, log and return a response
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    if (results.length === 0) {
       console.log(`GameId ${gameId} does not exist`);
-      res.status(404).json({ error: 'Game does not exist!' });
-    } else {
-      // Proceed with deletion if GameId exists
+      return res.status(404).json({ error: 'Game does not exist!' });
+    }
+
+    // Delete from DeveloperGame table
+    db.query('DELETE FROM DeveloperGame WHERE GameId = ?', [gameId], (err, deleteResults) => {
+      if (err) {
+        if (err.code === '45000') {
+          console.error('Error from trigger:', err.sqlMessage);
+          return res.status(400).json({ error: err.sqlMessage });
+        } else {
+          console.error('Error deleting from DeveloperGame:', err);
+          return res.status(500).json({ error: 'Internal Server Error' });
+        }
+      }
+
+      console.log(`DeveloperGame entries for GameId ${gameId} deleted successfully`);
+
+      // Delete from Game table
       db.query('DELETE FROM Game WHERE GameId = ?', [gameId], (err, deleteResults) => {
         if (err) {
-          // Check if it's the custom error message from the trigger (SQLSTATE 45000)
           if (err.code === '45000') {
-            // Return the error message from the trigger
             console.error('Error from trigger:', err.sqlMessage);
-            res.status(400).json({ error: err.sqlMessage });
+            return res.status(400).json({ error: err.sqlMessage });
           } else {
-            // Handle other errors
-            console.error('Error deleting the game:', err);
-            res.status(500).json({ error: 'Internal Server Error' });
+            console.error('Error deleting from Game:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
           }
-        } else {
-          console.log(`GameId ${gameId} deleted successfully`);
-          res.json({ success: true });
         }
+
+        console.log(`GameId ${gameId} deleted successfully`);
+        return res.json({ success: true });
       });
-    }
+    });
   });
 });
 

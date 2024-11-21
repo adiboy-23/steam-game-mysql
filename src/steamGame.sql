@@ -188,17 +188,17 @@ DELIMITER ;
 
 
 -- TRIGGER FOR THE DELETION GAME 
-DELIMITER $$
+-- DELIMITER $$
 
-CREATE TRIGGER after_game_delete
-AFTER DELETE ON Game
-FOR EACH ROW
-BEGIN
-    DELETE FROM developergame WHERE GameId = OLD.GameId;
-    DELETE FROM publishergame WHERE GameId = OLD.GameId;
-END$$
+-- CREATE TRIGGER after_game_delete
+-- AFTER DELETE ON Game
+-- FOR EACH ROW
+-- BEGIN
+--     DELETE FROM developergame WHERE GameId = OLD.GameId;
+--     DELETE FROM publishergame WHERE GameId = OLD.GameId;
+-- END$$
 
-DELIMITER ;
+-- DELIMITER ;
 
 
 -- trigger for deletion of game which doestn exist
@@ -224,3 +224,6 @@ END $$
 DELIMITER ;
 
 
+
+-- INSERT INTO discount (GameId, DiscountPercentage, StartDate, EndDate) 
+-- VALUES (24, 50.00, '2024-11-21', '2024-11-22');
